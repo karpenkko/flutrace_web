@@ -1,4 +1,5 @@
 import 'package:flutrace_web/core/widgets/header.dart';
+import 'package:flutrace_web/features/analytics/presentation/analytics_tab.dart';
 import 'package:flutrace_web/features/analytics/presentation/dashboard_tab.dart';
 import 'package:flutrace_web/features/logs/presentation/cubit/log_cubit.dart';
 import 'package:flutrace_web/features/projects/presentation/cubit/project_cubit.dart';
@@ -99,7 +100,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
       case ProjectTab.logs:
         return const LogsTab();
       case ProjectTab.analytics:
-        return const SizedBox();
+        return const AnalyticsTab();
       case ProjectTab.settings:
         return const SettingsTab();
     }
