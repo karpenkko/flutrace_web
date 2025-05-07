@@ -1,9 +1,11 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
+import 'package:flutrace_web/features/logs/data/models/log_model.dart';
 import 'package:flutrace_web/features/logs/domain/repositories/logs_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'dart:html';
 import 'log_state_data.dart';
-
 part 'log_state.dart';
 
 class LogsCubit extends Cubit<LogsState> {
@@ -15,6 +17,7 @@ class LogsCubit extends Cubit<LogsState> {
 
   LogsStateData get _data => state.stateData;
 
+  EventSource? _eventSource;
   bool _isFetching = false;
 
   Future<void> fetchLogs(
@@ -74,5 +77,41 @@ class LogsCubit extends Cubit<LogsState> {
   void toggleJsonView() {
     emit(LogDetailLoaded(
         stateData: _data.copyWith(isJsonView: !_data.isJsonView)));
+  }
+
+  void startSSE(String projectId) {
+    stopSSE();
+
+    final uri = Uri.parse('http://localhost:8000/logs/stream/$projectId');
+    _eventSource = EventSource(uri.toString());
+
+    _eventSource!.onMessage.listen((event) {
+      final data = event.data;
+      try {
+        final json = jsonDecode(data);
+        final log = LogModel.fromJson(json);
+        final currentLogs = _data.logs;
+
+
+
+        if (!currentLogs.any((e) => e.id == log.id)) {
+          final updated = [log, ...currentLogs];
+          emit(LogsLoaded(stateData: _data.copyWith(logs: updated)));
+        }
+      } catch (e) {
+        print('Failed to parse SSE data: $e');
+      }
+    });
+  }
+
+  void stopSSE() {
+    _eventSource?.close();
+    _eventSource = null;
+  }
+
+  @override
+  Future<void> close() {
+    stopSSE();
+    return super.close();
   }
 }

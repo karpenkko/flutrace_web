@@ -35,7 +35,8 @@ class LogEntity extends Equatable {
 extension LogTimeAgo on LogEntity {
   String get timeAgo {
     final now = DateTime.now();
-    final diff = now.difference(appeared);
+    final localAppeared = appeared.toLocal();
+    final diff = now.difference(localAppeared);
 
     if (diff.inMinutes < 1) return 'just_now'.tr();
     if (diff.inMinutes < 60) return 'minutes_ago'.tr(args: ['${diff.inMinutes}']);

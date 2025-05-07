@@ -37,6 +37,7 @@ class _LogsTabState extends State<LogsTab> {
     projectId = sl<ProjectCubit>().state.stateData.selectedProject?.id;
     if (projectId != null) {
       _logsCubit.fetchLogs(projectId!);
+      _logsCubit.startSSE(projectId!);
     }
     _scrollController.addListener(_onScroll);
   }
@@ -90,6 +91,7 @@ class _LogsTabState extends State<LogsTab> {
     _scrollController.dispose();
     _searchController.dispose();
     _searchFocusNode.dispose();
+    _logsCubit.stopSSE();
     _debounce?.cancel();
     super.dispose();
   }
