@@ -5,8 +5,13 @@ import 'package:flutter/material.dart';
 
 class LogTable extends StatelessWidget {
   final List<LogEntity> logs ;
+  final ValueChanged<int>? onTap;
 
-  const LogTable({super.key, required this.logs});
+  const LogTable({
+    super.key,
+    required this.logs,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +20,7 @@ class LogTable extends StatelessWidget {
         color: Theme.of(context).colorScheme.primary,
         borderRadius: BorderRadius.circular(12),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
       child: Column(
         children: [
           _LogRow(
@@ -33,6 +38,7 @@ class LogTable extends StatelessWidget {
             os: log.os,
             environment: log.environment,
             appeared: log.timeAgo,
+            onTap: () => onTap?.call(log.id),
           )),
         ],
       ),
@@ -47,6 +53,7 @@ class _LogRow extends StatelessWidget {
   final String environment;
   final String appeared;
   final bool isHeader;
+  final VoidCallback? onTap;
 
   const _LogRow({
     required this.message,
@@ -55,6 +62,7 @@ class _LogRow extends StatelessWidget {
     required this.environment,
     required this.appeared,
     this.isHeader = false,
+    this.onTap,
   });
 
   @override
@@ -63,20 +71,24 @@ class _LogRow extends StatelessWidget {
         ? AppTextStyles.searchField(context)
         : AppTextStyles.body(context);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 5,
-            child: Text(message, style: isHeader ? style : style.copyWith(fontWeight: FontWeight.w600)),
-          ),
-          Expanded(flex: 1, child: Text(level, style: style)),
-          Expanded(flex: 1, child: Text(os ?? 'null', style: style)),
-          Expanded(flex: 1, child: Text(environment, style: style)),
-          Expanded(flex: 1, child: Text(appeared, style: style)),
-        ],
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 5,
+              child: Text(message, style: isHeader ? style : style.copyWith(fontWeight: FontWeight.w600)),
+            ),
+            Expanded(flex: 1, child: Text(level, style: style)),
+            Expanded(flex: 1, child: Text(os ?? 'null', style: style)),
+            Expanded(flex: 1, child: Text(environment, style: style)),
+            Expanded(flex: 1, child: Text(appeared, style: style)),
+          ],
+        ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutrace_web/features/logs/data/models/detailed_log_model.dart';
 import 'package:flutrace_web/features/logs/data/models/log_model.dart';
 
 abstract class LogsDatasource {
@@ -8,7 +9,9 @@ abstract class LogsDatasource {
     String? os,
     String? environment,
     String? search,
+    DateTime? cursor
   });
+  Future<DetailedLogModel> getLogDetail(String projectId, int logId);
 }
 
 class LogsDatasourceImpl extends LogsDatasource {
@@ -23,6 +26,7 @@ class LogsDatasourceImpl extends LogsDatasource {
     String? os,
     String? environment,
     String? search,
+    DateTime? cursor
   }) async {
     final response = await dio.get(
       'logs/$projectId',
@@ -31,9 +35,16 @@ class LogsDatasourceImpl extends LogsDatasource {
         if (os != null) 'os': os,
         if (environment != null) 'environment': environment,
         if (search != null) 'search': search,
+        if (cursor != null) 'before': cursor.toIso8601String(),
       },
     );
     final List<dynamic> data = response.data;
     return data.map((log) => LogModel.fromJson(log)).toList();
+  }
+
+  @override
+  Future<DetailedLogModel> getLogDetail(String projectId, int logId) async {
+    final response = await dio.get('logs/$projectId/$logId');
+    return DetailedLogModel.fromJson(response.data);
   }
 }

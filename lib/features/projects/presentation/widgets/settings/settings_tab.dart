@@ -10,33 +10,38 @@ class SettingsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: 500,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ProjectNameField(),
-                  SizedBox(height: 40),
-                  ProjectTokenField(),
-                  SizedBox(height: 40),
-                  ProjectOwnersField(),
-                ],
-              ),
+    return Align(
+      alignment: Alignment.topCenter,
+      child: SingleChildScrollView(
+        child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: BorderRadius.circular(12),
             ),
-            DeleteButton(),
-          ],
-        ),
-      );
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 500,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ProjectNameField(),
+                      SizedBox(height: 40),
+                      ProjectTokenField(),
+                      SizedBox(height: 40),
+                      ProjectOwnersField(),
+                    ],
+                  ),
+                ),
+                DeleteButton(),
+              ],
+            ),
+          ),
+      ),
+    );
   }
 }
 

@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutrace_web/core/styles/font.dart';
 import 'package:flutrace_web/core/widgets/logo.dart';
 import 'package:flutrace_web/core/widgets/text_field.dart';
+import 'package:flutrace_web/features/auth/presentation/cubits/user_cubit.dart';
 import 'package:flutrace_web/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,8 +49,9 @@ class _SignInFormState extends State<SignInForm> {
     return BlocProvider.value(
       value: _authCubit,
       child: BlocConsumer<AuthCubit, AuthState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state.status == AuthStatus.success) {
+              await sl<UserCubit>().loadUser();
               context.go('/home');
             }
           },

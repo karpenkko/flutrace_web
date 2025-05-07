@@ -11,6 +11,7 @@ class UserCubit extends Cubit<UserState> {
         super(const UserInitial());
 
   Future<void> loadUser() async {
+    print('Loading user...');
     emit(const UserLoading());
     final response = await _repository.getCurrentUser();
     response.fold(

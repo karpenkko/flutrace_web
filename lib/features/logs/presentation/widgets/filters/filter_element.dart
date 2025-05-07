@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutrace_web/core/styles/font.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -109,7 +110,7 @@ class _FilterElementState extends State<FilterElement> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                selected ?? widget.placeholder,
+                selected ?? widget.placeholder.tr(),
                 style: AppTextStyles.caption(context),
                 overflow: TextOverflow.ellipsis,
               ),

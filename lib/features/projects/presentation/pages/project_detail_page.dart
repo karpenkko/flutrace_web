@@ -52,36 +52,28 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               return const Center(child: Text('Project not found'));
             }
 
-            return LayoutBuilder(
-                builder: (context, constraints) {
-                return Row(
-                  children: [
-                    const Sidebar(),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 40),
-                        child: SingleChildScrollView(
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                            child: Column(
-                              children: [
-                                AppHeader(
-                                  isFull: false,
-                                  projectName: project.name,
-                                ),
-                                const SizedBox(height: 20),
-                                const TabsRow(),
-                                const SizedBox(height: 20),
-                                _buildTabContent(state.stateData.selectedTab),
-                              ],
-                            ),
-                          ),
+            return Row(
+              children: [
+                const Sidebar(),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        AppHeader(
+                          isFull: false,
+                          projectName: project.name,
                         ),
-                      ),
+                        const SizedBox(height: 20),
+                        const TabsRow(),
+                        const SizedBox(height: 20),
+                        Flexible(child: _buildTabContent(state.stateData.selectedTab)),
+                      ],
                     ),
-                  ],
-                );
-              }
+                  ),
+                ),
+              ],
             );
           } else if (state is ProjectLoading) {
             return const Center(child: CircularProgressIndicator());

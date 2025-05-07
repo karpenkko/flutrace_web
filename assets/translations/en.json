@@ -37,5 +37,17 @@
   "just_now": "just now",
   "minutes_ago": "{} min ago",
   "hours_ago": "{} hours ago",
-  "days_ago": "{} days ago"
+  "days_ago": "{} days ago",
+  "log_detail": {
+    "back": "Back",
+    "json": "JSON view",
+    "log_details": "Log details",
+    "device": "Device",
+    "error": "Error details",
+    "custom": "Custom data",
+    "copied": "Copied"
+  },
+  "no_logs_found": "This project has no logs yet. Once logging is active, logs will appear here.",
+  "no_dashboard_data": "The dashboard is currently unavailable because no logs have been received for this project. Send at least one log to see the statistics.",
+  "no_analytics_data": "Analytics are currently unavailable — there are no logs for this project yet. Once data arrives, charts will be generated automatically."
 }

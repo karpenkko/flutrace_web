@@ -2,6 +2,7 @@ import 'package:flutrace_web/core/error/failures.dart';
 import 'package:flutrace_web/core/error/repository_request_handler.dart';
 import 'package:flutrace_web/core/helper/type_aliases.dart';
 import 'package:flutrace_web/features/logs/data/datasource/logs_datasource.dart';
+import 'package:flutrace_web/features/logs/domain/entities/detailed_log_entity.dart';
 import 'package:flutrace_web/features/logs/domain/entities/log_entity.dart';
 import 'package:flutrace_web/features/logs/domain/repositories/logs_repository.dart';
 
@@ -19,6 +20,7 @@ class LogsRepositoryImpl extends LogsRepository {
     String? os,
     String? environment,
     String? search,
+    DateTime? cursor
   }) {
     return RepositoryRequestHandler<List<LogEntity>>()(
       request: () async {
@@ -28,7 +30,19 @@ class LogsRepositoryImpl extends LogsRepository {
           os: os,
           environment: environment,
           search: search,
+          cursor: cursor,
         );
+        return result;
+      },
+      defaultFailure: LogInFailure(),
+    );
+  }
+
+  @override
+  FutureFailable<DetailedLogEntity> getLogDetail(String projectId, int logId) {
+    return RepositoryRequestHandler<DetailedLogEntity>()(
+      request: () async {
+        final result = await logsDatasource.getLogDetail(projectId, logId);
         return result;
       },
       defaultFailure: LogInFailure(),

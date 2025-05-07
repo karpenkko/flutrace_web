@@ -23,6 +23,20 @@ class DetailedLogEntity extends Equatable {
     this.custom,
   });
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'message': message,
+      'level': level,
+      'timestamp': timestamp.toIso8601String(),
+      'token': token,
+      'environment': environment,
+      'device': device,
+      'error': error,
+      'custom': custom,
+    };
+  }
+
   @override
   List<Object?> get props => [
     id,

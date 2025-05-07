@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutrace_web/core/styles/font.dart';
 
@@ -35,7 +36,7 @@ class SearchInput extends StatelessWidget {
           decoration: InputDecoration(
             isCollapsed: true,
             border: InputBorder.none,
-            hintText: hintText,
+            hintText: hintText.tr(),
             hintStyle: AppTextStyles.searchField(context).copyWith(
               color: Theme.of(context).colorScheme.secondary.withOpacity(0.6),
             ),

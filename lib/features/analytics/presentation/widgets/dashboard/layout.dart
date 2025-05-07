@@ -69,11 +69,11 @@ class DashboardLayout extends StatelessWidget {
             height: 250,
             child: SfCircularChart(
               title: ChartTitle(text: 'Рівні логів (сьогодні)'),
-              legend: Legend(
+              legend: const Legend(
                 isVisible: true,
                 position: LegendPosition.right,
                 overflowMode: LegendItemOverflowMode.wrap,
-                textStyle: const TextStyle(fontSize: 12),
+                textStyle: TextStyle(fontSize: 12),
               ),
               series: [
                 PieSeries<LevelCount, String>(
@@ -92,7 +92,7 @@ class DashboardLayout extends StatelessWidget {
                     _ => Colors.grey,
                   },
                   dataLabelSettings: const DataLabelSettings(
-                    isVisible: false, // 👈 ВИМИКАЄМО підписи на самій діаграмі
+                    isVisible: false,
                   ),
                 ),
               ],
@@ -102,7 +102,7 @@ class DashboardLayout extends StatelessWidget {
             width: 500,
             height: 250,
             child: SfCartesianChart(
-              primaryXAxis: CategoryAxis(),
+              primaryXAxis: const CategoryAxis(),
               series: <LineSeries<LogCountPoint, String>>[
                 LineSeries<LogCountPoint, String>(
                   dataSource: logsPerDay,
@@ -119,7 +119,7 @@ class DashboardLayout extends StatelessWidget {
             width: 300,
             height: 250,
             child: SfCartesianChart(
-              primaryXAxis: CategoryAxis(),
+              primaryXAxis: const CategoryAxis(),
               series: <ColumnSeries<VersionErrorStat, String>>[
                 ColumnSeries<VersionErrorStat, String>(
                   dataSource: topVersions,
