@@ -15,15 +15,20 @@ class LogsCubit extends Cubit<LogsState> {
 
   LogsStateData get _data => state.stateData;
 
+  bool _isFetching = false;
+
   Future<void> fetchLogs(
-      String projectId, {
-        String? level,
-        String? os,
-        String? environment,
-        String? search,
-        DateTime? cursor,
-        bool append = false,
-      }) async {
+    String projectId, {
+    String? level,
+    String? os,
+    String? environment,
+    String? search,
+    DateTime? cursor,
+    bool append = false,
+  }) async {
+    if (_isFetching) return;
+    _isFetching = true;
+
     if (!append) emit(LogsLoading(stateData: _data));
 
     final result = await _repository.getLogsForProject(
@@ -36,30 +41,38 @@ class LogsCubit extends Cubit<LogsState> {
     );
 
     result.fold(
-          (failure) => emit(LogsError(message: failure.errorMessage, stateData: _data)),
-          (logs) {
+      (failure) =>
+          emit(LogsError(message: failure.errorMessage, stateData: _data)),
+      (logs) {
         final updatedLogs = append ? [..._data.logs, ...logs] : logs;
-        emit(LogsLoaded(stateData: _data.copyWith(logs: updatedLogs)));
+        final newCursor =
+            updatedLogs.isNotEmpty ? updatedLogs.last.appeared : null;
+        emit(LogsLoaded(
+            stateData: _data.copyWith(logs: updatedLogs, cursor: newCursor)));
       },
     );
+    _isFetching = false;
   }
-
 
   Future<void> fetchLogDetail(String projectId, int logId) async {
     emit(LogsLoading(stateData: _data));
     final result = await _repository.getLogDetail(projectId, logId);
 
     result.fold(
-          (failure) => emit(LogsError(message: failure.errorMessage, stateData: _data)),
-          (log) => emit(LogDetailLoaded(stateData: _data.copyWith(selectedLog: log))),
+      (failure) =>
+          emit(LogsError(message: failure.errorMessage, stateData: _data)),
+      (log) =>
+          emit(LogDetailLoaded(stateData: _data.copyWith(selectedLog: log))),
     );
   }
 
   void clearSelectedLog() {
-    emit(LogsLoaded(stateData:_data.copyWith(selectedLog: null, isJsonView: false)));
+    emit(LogsLoaded(
+        stateData: _data.copyWith(selectedLog: null, isJsonView: false)));
   }
 
   void toggleJsonView() {
-    emit(LogDetailLoaded(stateData: _data.copyWith(isJsonView: !_data.isJsonView)));
+    emit(LogDetailLoaded(
+        stateData: _data.copyWith(isJsonView: !_data.isJsonView)));
   }
 }

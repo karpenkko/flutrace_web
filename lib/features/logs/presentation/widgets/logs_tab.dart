@@ -50,26 +50,27 @@ class _LogsTabState extends State<LogsTab> {
     });
   }
 
-  void _onScroll() {
+  void _onScroll() async {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 100) {
-      if (_logsCubit.state is LogsLoaded) {
-        final logs = (_logsCubit.state as LogsLoaded).stateData.logs;
-        if (logs.isNotEmpty) {
-          final lastTimestamp = logs.last.appeared;
-          _logsCubit.fetchLogs(
+      final state = _logsCubit.state;
+      if (state is LogsLoaded) {
+        final cursor = state.stateData.cursor;
+        if (cursor != null && projectId != null) {
+          await _logsCubit.fetchLogs(
             projectId!,
             level: selectedLevel,
             os: selectedOS,
             environment: selectedEnvironment,
             search: searchQuery,
-            cursor: lastTimestamp,
+            cursor: cursor,
             append: true,
           );
         }
       }
     }
   }
+
 
   void _applyFilters() {
     if (projectId == null) return;
