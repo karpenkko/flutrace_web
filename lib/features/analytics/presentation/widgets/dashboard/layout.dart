@@ -1,3 +1,4 @@
+import 'package:flutrace_web/core/styles/font.dart';
 import 'package:flutrace_web/features/analytics/data/models/dashboard_data.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -25,126 +26,195 @@ class DashboardLayout extends StatelessWidget {
     final date = DateFormat('dd.MM.yyyy').format(lastLogTime);
 
     return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Wrap(
-        spacing: 16,
-        runSpacing: 16,
+      padding: const EdgeInsets.all(20),
+      child: Column(
         children: [
-          _card(
-            width: 250,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('todays logs', style: TextStyle(fontSize: 16)),
-                Text(
-                  '$todaysLogs',
-                  style: const TextStyle(
-                    fontSize: 48,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                  ),
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    _card(
+                      context: context,
+                      height: 150,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('todays logs',
+                                style: AppTextStyles.headingMedium(context)),
+                            Text('$todaysLogs',
+                                style: AppTextStyles.digits(context)),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    _card(
+                      context: context,
+                      height: 150,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  time,
+                                  style: AppTextStyles.digits(context)
+                                      .copyWith(fontSize: 40),
+                                ),
+                                Text(
+                                  date,
+                                  style: AppTextStyles.digits(context)
+                                      .copyWith(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                            Text('last log appeared',
+                                style: AppTextStyles.headingMedium(context)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          _card(
-            width: 250,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  time,
-                  style: const TextStyle(fontSize: 36, color: Colors.blue),
-                ),
-                Text(
-                  date,
-                  style: const TextStyle(fontSize: 18, color: Colors.blue),
-                ),
-                const Text('last log appeared'),
-              ],
-            ),
-          ),
-          _card(
-            width: 300,
-            height: 250,
-            child: SfCircularChart(
-              title: ChartTitle(text: 'Рівні логів (сьогодні)'),
-              legend: const Legend(
-                isVisible: true,
-                position: LegendPosition.right,
-                overflowMode: LegendItemOverflowMode.wrap,
-                textStyle: TextStyle(fontSize: 12),
               ),
-              series: [
-                PieSeries<LevelCount, String>(
-                  dataSource: levelDistribution,
-                  xValueMapper: (LevelCount data, _) {
-                    final total = levelDistribution.fold<int>(0, (sum, e) => sum + e.count);
-                    final percent = (data.count / total * 100).toStringAsFixed(1);
-                    return '${data.level} ($percent%)';
-                  },
-                  yValueMapper: (e, _) => e.count,
-                  pointColorMapper: (e, _) => switch (e.level) {
-                    'error' => Colors.orange,
-                    'critical' => Colors.red,
-                    'info' => Colors.blue,
-                    'warning' => Colors.yellow,
-                    _ => Colors.grey,
-                  },
-                  dataLabelSettings: const DataLabelSettings(
-                    isVisible: false,
+              const SizedBox(width: 20),
+              Expanded(
+                child: _card(
+                  context: context,
+                  height: 320,
+                  child: SfCircularChart(
+                    title: ChartTitle(
+                        text: 'Рівні логів (сьогодні)',
+                        textStyle: AppTextStyles.headingMedium(context)),
+                    legend: Legend(
+                      isVisible: true,
+                      position: LegendPosition.right,
+                      textStyle: AppTextStyles.caption(context)
+                    ),
+                    series: [
+                      PieSeries<LevelCount, String>(
+                        dataSource: levelDistribution,
+                        xValueMapper: (data, _) =>
+                            '${data.level} (${data.count})',
+                        yValueMapper: (e, _) => e.count,
+                        pointColorMapper: (e, _) => switch (e.level) {
+                          'error' => const Color(0xFFFFA630),
+                          'critical' => Theme.of(context).colorScheme.error,
+                          'info' => Theme.of(context).colorScheme.surface,
+                          'warning' => const Color(0xFFF0DC93),
+                          _ => Theme.of(context).cardColor,
+                        },
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          _card(
-            width: 500,
-            height: 250,
-            child: SfCartesianChart(
-              primaryXAxis: const CategoryAxis(),
-              series: <LineSeries<LogCountPoint, String>>[
-                LineSeries<LogCountPoint, String>(
-                  dataSource: logsPerDay,
-                  xValueMapper: (e, _) =>
-                      DateFormat('dd.MM').format(DateTime.parse(e.date)),
-                  yValueMapper: (e, _) => e.count,
-                  markerSettings: const MarkerSettings(isVisible: true),
-                  color: Colors.blue,
-                )
-              ],
-            ),
-          ),
-          _card(
-            width: 300,
-            height: 250,
-            child: SfCartesianChart(
-              primaryXAxis: const CategoryAxis(),
-              series: <ColumnSeries<VersionErrorStat, String>>[
-                ColumnSeries<VersionErrorStat, String>(
-                  dataSource: topVersions,
-                  xValueMapper: (v, _) => v.version,
-                  yValueMapper: (v, _) => v.errors,
-                  pointColorMapper: (v, _) => Colors.blue,
-                  dataLabelSettings: const DataLabelSettings(isVisible: true),
-                )
-              ],
-            ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Expanded(
+                child: _card(
+                  context: context,
+                  height: 320,
+                  child: SfCartesianChart(
+                    title: ChartTitle(
+                      text: 'Логи за останні 7 днів',
+                      textStyle: AppTextStyles.headingMedium(context),
+                    ),
+                    trackballBehavior: TrackballBehavior(
+                      enable: true,
+                      activationMode: ActivationMode.singleTap,
+                      tooltipSettings: InteractiveTooltip(
+                        enable: true,
+                        format: 'point.y',
+                        color: Theme.of(context).cardColor,
+                        textStyle: AppTextStyles.caption(context),
+                      ),
+                      lineColor: Theme.of(context).colorScheme.surface,
+                      lineDashArray: const [4, 3],
+                    ),
+                    primaryXAxis: CategoryAxis(
+                      labelStyle: AppTextStyles.caption(context),
+                    ),
+                    primaryYAxis: NumericAxis(
+                      labelStyle: AppTextStyles.caption(context),
+                    ),
+                    series: <LineSeries<LogCountPoint, String>>[
+                      LineSeries<LogCountPoint, String>(
+                        dataSource: logsPerDay,
+                        xValueMapper: (e, _) =>
+                            DateFormat('dd.MM').format(DateTime.parse(e.date)),
+                        yValueMapper: (e, _) => e.count,
+                        markerSettings: const MarkerSettings(isVisible: true),
+                        color: Theme.of(context).colorScheme.surface,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: _card(
+                  context: context,
+                  height: 320,
+                  child: SfCartesianChart(
+                    title: ChartTitle(
+                      text: 'Кількість логів за версіями',
+                      textStyle: AppTextStyles.headingMedium(context),
+                    ),
+                    primaryXAxis: CategoryAxis(
+                      labelStyle: AppTextStyles.caption(context),
+                    ),
+                    primaryYAxis: NumericAxis(
+                      labelStyle: AppTextStyles.caption(context),
+                    ),
+                    series: <ColumnSeries<VersionErrorStat, String>>[
+                      ColumnSeries<VersionErrorStat, String>(
+                        dataSource: topVersions,
+                        xValueMapper: (v, _) => v.version,
+                        yValueMapper: (v, _) => v.errors,
+                        pointColorMapper: (v, _) =>
+                            Theme.of(context).colorScheme.surface,
+                        dataLabelSettings: DataLabelSettings(
+                          isVisible: true,
+                          textStyle: AppTextStyles.caption(context),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 
-  Widget _card({required Widget child, double? width, double? height}) {
+  Widget _card(
+      {required BuildContext context,
+      required Widget child,
+      double? width,
+      double? height}) {
     return Container(
       width: width,
       height: height,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(
+          color: Theme.of(context).cardColor,
+          width: 2,
+        ),
       ),
       child: child,
     );

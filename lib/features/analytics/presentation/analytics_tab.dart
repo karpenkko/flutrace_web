@@ -86,7 +86,7 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
                     interval: state.stateData.interval,
                     summary: state.stateData.summary!,
                     onIntervalChanged: (val) {
-                      _analyticsCubit.fetchLogsCount('1234-abc', val);
+                      _analyticsCubit.fetchLogsCount(currentProjectId!, val);
                     },
                   );
                 }

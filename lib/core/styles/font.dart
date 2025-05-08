@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
 class AppTextStyles {
+  static TextStyle digits(BuildContext context) => TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 60,
+    fontWeight: FontWeight.w600,
+    color: Theme.of(context).colorScheme.surface,
+  );
+
   static TextStyle headingExtraLarge(BuildContext context) => TextStyle(
     fontFamily: 'Inter',
     fontSize: 48,

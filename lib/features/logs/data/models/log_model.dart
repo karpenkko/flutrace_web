@@ -22,7 +22,7 @@ class LogModel extends LogEntity {
       level: json['level'],
       os: os,
       environment: json['environment'],
-      appeared: DateTime.parse(json['timestamp']),
+      appeared: DateTime.parse(json['timestamp']).toLocal(),
     );
   }
 }

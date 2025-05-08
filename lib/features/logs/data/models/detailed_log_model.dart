@@ -18,7 +18,7 @@ class DetailedLogModel extends DetailedLogEntity {
       id: json['id'],
       message: json['message'],
       level: json['level'],
-      timestamp: DateTime.parse(json['timestamp']),
+      timestamp: DateTime.parse(json['timestamp']).toLocal(),
       token: json['token'],
       environment: json['environment'],
       device: json['device'],

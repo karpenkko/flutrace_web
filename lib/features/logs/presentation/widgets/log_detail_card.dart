@@ -84,7 +84,7 @@ class _LogDetailCardState extends State<LogDetailCard> {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         border: Border.all(
-            color: Theme.of(context).colorScheme.surface, width: 1.5),
+            color: Theme.of(context).colorScheme.surface, width: 2),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -199,7 +199,7 @@ class _LogDetailCardState extends State<LogDetailCard> {
                       decoration: BoxDecoration(
                         border: Border.all(
                             color: Theme.of(context).colorScheme.surface,
-                            width: 1.5),
+                            width: 2),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Column(
