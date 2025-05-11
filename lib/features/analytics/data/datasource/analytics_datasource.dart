@@ -21,8 +21,7 @@ class AnalyticsDatasourceImpl extends AnalyticsDatasource {
 
   @override
   Future<List<TimePoint>> getLogsCount(String projectId, String interval) async {
-    final res = await dio.get('/analytics/logs_count', queryParameters: {
-      'project_token': projectId,
+    final res = await dio.get('/projects/$projectId/analytics/logs_count', queryParameters: {
       'interval': interval,
     });
 
@@ -33,9 +32,7 @@ class AnalyticsDatasourceImpl extends AnalyticsDatasource {
 
   @override
   Future<AnalyticsSummary> getSummary(String projectId) async {
-    final res = await dio.get('/analytics/summary', queryParameters: {
-      'project_token': projectId,
-    });
+    final res = await dio.get('/projects/$projectId/analytics/summary');
 
     return AnalyticsSummary.fromJson(res.data);
   }

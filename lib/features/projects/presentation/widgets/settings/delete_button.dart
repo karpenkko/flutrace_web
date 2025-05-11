@@ -102,13 +102,13 @@ class DeleteButton extends StatelessWidget {
     return GestureDetector(
       onTap: () => _showConfirmationDialog(context, project.name),
       child: Container(
-        width: 200,
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(

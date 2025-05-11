@@ -34,7 +34,7 @@ class AuthCubit extends Cubit<AuthState> {
       (failure) {
         emit(AuthState(
           status: AuthStatus.failure,
-          passwordError: failure.errorMessage,
+          passwordError: 'incorrect_password'.tr(),
         ));
       },
       (data) {

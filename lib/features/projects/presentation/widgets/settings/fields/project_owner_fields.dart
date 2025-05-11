@@ -30,10 +30,10 @@ class _ProjectOwnersFieldState extends State<ProjectOwnersField> {
     final email = _newOwnerController.text.trim();
     if (email.isNotEmpty) {
       _projectCubit.addProjectOwner(email);
-      setState(() {
-        _newOwnerController.clear();
-        _adding = false;
-      });
+      // setState(() {
+      //   _newOwnerController.clear();
+      //   _adding = false;
+      // });
     }
   }
 
@@ -51,12 +51,16 @@ class _ProjectOwnersFieldState extends State<ProjectOwnersField> {
   Widget build(BuildContext context) {
     return BlocListener<ProjectCubit, ProjectState>(
       bloc: _projectCubit,
-      listenWhen: (prev, curr) =>
-          prev.stateData.selectedProject?.id !=
-          curr.stateData.selectedProject?.id,
+      // listenWhen: (prev, curr) =>
+      //     prev.stateData.selectedProject?.id !=
+      //         curr.stateData.selectedProject?.id ||
+      //     prev.stateData.addingProjectOwnerError !=
+      //         curr.stateData.addingProjectOwnerError,
       listener: (context, state) {
-        _newOwnerController.clear();
-        _adding = false;
+        if (state.stateData.addingProjectOwnerError == null) {
+          _newOwnerController.clear();
+          _adding = false;
+        }
         _lastProjectId = state.stateData.selectedProject?.id;
       },
       child: Builder(
@@ -108,50 +112,63 @@ class _ProjectOwnersFieldState extends State<ProjectOwnersField> {
                 );
               }),
               if (_adding)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: TextField(
-                    controller: _newOwnerController,
-                    autofocus: true,
-                    style: AppTextStyles.body(context),
-                    decoration: InputDecoration(
-                      hintText: 'email'.tr(),
-                      filled: true,
-                      fillColor: Theme.of(context).primaryColor,
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 18),
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.only(right: 6),
-                        child: IconButton(
-                          icon: const Icon(Icons.check),
-                          onPressed: _addOwner,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TextField(
+                      controller: _newOwnerController,
+                      autofocus: true,
+                      style: AppTextStyles.body(context),
+                      decoration: InputDecoration(
+                        hintText: 'email'.tr(),
+                        filled: true,
+                        fillColor: Theme.of(context).primaryColor,
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 20, horizontal: 18),
+                        suffixIcon: Padding(
+                          padding: const EdgeInsets.only(right: 6),
+                          child: IconButton(
+                            icon: const Icon(Icons.check),
+                            onPressed: _addOwner,
+                          ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.surface),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.surface),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.surface),
                         ),
                       ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.surface),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.surface),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.surface),
-                      ),
                     ),
-                  ),
+                    BlocBuilder<ProjectCubit, ProjectState>(
+                        builder: (context, state) {
+                      return SizedBox(
+                        height: 16,
+                        child: state.stateData.addingProjectOwnerError != null
+                            ? Text(
+                                state.stateData.addingProjectOwnerError!,
+                                style: AppTextStyles.errorHint(context),
+                              )
+                            : const SizedBox.shrink(),
+                      );
+                    }),
+                  ],
                 ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               Align(
                 alignment: Alignment.centerRight,
                 child: GestureDetector(
                   onTap: () => setState(() => _adding = true),
                   child: Container(
-                    width: 200,
                     padding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 14),
                     decoration: BoxDecoration(
@@ -159,6 +176,7 @@ class _ProjectOwnersFieldState extends State<ProjectOwnersField> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(

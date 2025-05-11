@@ -13,14 +13,13 @@ class AuthRepositoryImpl extends AuthRepository {
   final AuthDatasource datasource;
 
   @override
-  FutureFailable<bool?> signIn({
+  FutureFailable<void> signIn({
     required String email,
     required String password,
   }) {
-    return RepositoryRequestHandler<bool?>()(
+    return RepositoryRequestHandler<void>()(
       request: () async {
-        final result = await datasource.signIn(email: email, password: password);
-        return result;
+        await datasource.signIn(email: email, password: password);
       },
       defaultFailure: IncorrectPasswordFailure(),
     );

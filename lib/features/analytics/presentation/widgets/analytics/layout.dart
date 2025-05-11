@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutrace_web/core/styles/font.dart';
 import 'package:flutrace_web/features/analytics/data/models/analytics_data.dart';
 import 'package:flutter/material.dart';
@@ -33,24 +34,24 @@ class AnalyticsLayout extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      'Кількість логів за часом',
+                      'logs_over_time'.tr(),
                       style: AppTextStyles.headingMedium(context),
                     ),
                     const Spacer(),
                     DropdownButton<String>(
                       value: interval,
-                      items: const [
+                      items: [
                         DropdownMenuItem(
                           value: 'hour',
-                          child: Text('Щогодини'),
+                          child: Text('hourly'.tr()),
                         ),
                         DropdownMenuItem(
                           value: 'day',
-                          child: Text('По днях'),
+                          child: Text('daily'.tr()),
                         ),
                         DropdownMenuItem(
                           value: 'month',
-                          child: Text('По місяцю'),
+                          child: Text('monthly'.tr()),
                         ),
                       ],
                       onChanged: (val) =>
@@ -67,7 +68,7 @@ class AnalyticsLayout extends StatelessWidget {
                       labelStyle: AppTextStyles.caption(context),
                     ),
                     primaryYAxis: NumericAxis(
-                      title: AxisTitle(text: 'Кількість логів'),
+                      title: AxisTitle(text: 'log_count'.tr()),
                       labelStyle: AppTextStyles.caption(context),
                     ),
                     series: <CartesianSeries>[
@@ -76,7 +77,7 @@ class AnalyticsLayout extends StatelessWidget {
                         xValueMapper: (point, _) =>
                             _formatLabel(point.timestamp, interval),
                         yValueMapper: (point, _) => point.count,
-                        name: 'Логи',
+                        name: 'logs'.tr(),
                         color: Theme.of(context).colorScheme.surface,
                         dataLabelSettings: DataLabelSettings(
                             isVisible: true,
@@ -97,7 +98,7 @@ class AnalyticsLayout extends StatelessWidget {
                   height: 300,
                   child: SfCartesianChart(
                     title: ChartTitle(
-                      text: 'Пристрої',
+                      text: 'devices'.tr(),
                       textStyle: AppTextStyles.headingMedium(context),
                     ),
                     primaryXAxis: CategoryAxis(
@@ -127,7 +128,7 @@ class AnalyticsLayout extends StatelessWidget {
                   height: 300,
                   child: SfCircularChart(
                     title: ChartTitle(
-                      text: 'ОС',
+                      text: 'operation_system'.tr(),
                       textStyle: AppTextStyles.headingMedium(context),
                     ),
                     legend: Legend(
@@ -172,7 +173,7 @@ class AnalyticsLayout extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Найчастіші повідомлення',
+                      Text('most_frequent_messages'.tr(),
                           style: AppTextStyles.headingMedium(context)),
                       const SizedBox(height: 8),
                       LayoutBuilder(builder: (context, constraints) {
@@ -182,14 +183,14 @@ class AnalyticsLayout extends StatelessWidget {
                             columns: [
                               DataColumn(
                                 label: Text(
-                                  'Повідомлення',
+                                  'message'.tr(),
                                   style: AppTextStyles.searchField(context)
                                       .copyWith(fontWeight: FontWeight.w500),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Кількість',
+                                  'count'.tr(),
                                   style: AppTextStyles.searchField(context)
                                       .copyWith(fontWeight: FontWeight.w500),
                                 ),
@@ -238,7 +239,7 @@ class AnalyticsLayout extends StatelessWidget {
                   height: 300,
                   child: SfCartesianChart(
                     title: ChartTitle(
-                      text: 'Помилки за країнами',
+                      text: 'errors_by_country'.tr(),
                       textStyle: AppTextStyles.headingMedium(context),
                     ),
                     primaryXAxis: CategoryAxis(

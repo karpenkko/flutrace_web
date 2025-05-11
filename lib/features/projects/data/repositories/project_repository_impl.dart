@@ -63,7 +63,7 @@ class ProjectRepositoryImpl extends ProjectRepository {
         final result = await datasource.addProjectOwner(projectId, ownerEmail);
         return result;
       },
-      defaultFailure: LogInFailure(),
+      defaultFailure: AddingNewProjectOwnerFailure(),
     );
   }
 

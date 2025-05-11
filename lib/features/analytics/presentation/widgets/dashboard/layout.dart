@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutrace_web/core/styles/font.dart';
 import 'package:flutrace_web/features/analytics/data/models/dashboard_data.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,7 @@ class DashboardLayout extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('todays logs',
+                            Text('todays_logs'.tr(),
                                 style: AppTextStyles.headingMedium(context)),
                             Text('$todaysLogs',
                                 style: AppTextStyles.digits(context)),
@@ -75,7 +76,7 @@ class DashboardLayout extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Text('last log appeared',
+                            Text('last_log_appeared'.tr(),
                                 style: AppTextStyles.headingMedium(context)),
                           ],
                         ),
@@ -91,7 +92,7 @@ class DashboardLayout extends StatelessWidget {
                   height: 320,
                   child: SfCircularChart(
                     title: ChartTitle(
-                        text: 'Рівні логів (сьогодні)',
+                        text: 'log_levels_today'.tr(),
                         textStyle: AppTextStyles.headingMedium(context)),
                     legend: Legend(
                       isVisible: true,
@@ -127,7 +128,7 @@ class DashboardLayout extends StatelessWidget {
                   height: 320,
                   child: SfCartesianChart(
                     title: ChartTitle(
-                      text: 'Логи за останні 7 днів',
+                      text: 'logs_last_7_days'.tr(),
                       textStyle: AppTextStyles.headingMedium(context),
                     ),
                     trackballBehavior: TrackballBehavior(
@@ -168,7 +169,7 @@ class DashboardLayout extends StatelessWidget {
                   height: 320,
                   child: SfCartesianChart(
                     title: ChartTitle(
-                      text: 'Кількість логів за версіями',
+                      text: 'logs_by_versions'.tr(),
                       textStyle: AppTextStyles.headingMedium(context),
                     ),
                     primaryXAxis: CategoryAxis(

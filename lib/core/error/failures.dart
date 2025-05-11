@@ -52,6 +52,11 @@ class IncorrectPasswordFailure extends Failure {
       : super(errorMessage: 'Incorrect password provided');
 }
 
+class AddingNewProjectOwnerFailure extends Failure {
+  AddingNewProjectOwnerFailure()
+      : super(errorMessage: 'Owner with this email does not exists');
+}
+
 class ResetCodePasswordFailure extends Failure {}
 
 class GoogleSignUpFailure extends Failure {}

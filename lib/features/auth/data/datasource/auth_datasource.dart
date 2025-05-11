@@ -3,7 +3,7 @@ import 'package:flutrace_web/core/services/local_preferences.dart';
 import 'package:flutrace_web/features/auth/data/models/user_model.dart';
 
 abstract class AuthDatasource {
-  Future<bool?> signIn({
+  Future<void> signIn({
     required String email,
     required String password,
   });
@@ -20,7 +20,7 @@ class AuthDatasourceImpl extends AuthDatasource {
   final LocalStorageService localStorage;
 
   @override
-  Future<bool?> signIn({
+  Future<void> signIn({
     required String email,
     required String password,
   }) async {
@@ -39,8 +39,6 @@ class AuthDatasourceImpl extends AuthDatasource {
     await localStorage.setString('access_token', accessToken);
     await localStorage.setString('refresh_token', refreshToken);
     await localStorage.setInt('user_id', userId);
-
-    return response.statusCode == 200;
   }
 
   @override

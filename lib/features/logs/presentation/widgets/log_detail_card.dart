@@ -113,7 +113,6 @@ class _LogDetailCardState extends State<LogDetailCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Back button
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -194,58 +193,49 @@ class _LogDetailCardState extends State<LogDetailCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Theme.of(context).colorScheme.surface,
-                            width: 2),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('log_detail.log_details'.tr(),
-                              style: AppTextStyles.headingMedium(context)),
-                          const SizedBox(height: 12),
-                          _buildItem(context, 'ID', widget.log.id.toString()),
-                          _buildItem(context, 'Message', widget.log.message),
-                          _buildItem(context, 'Level', widget.log.level),
-                          _buildItem(
-                              context, 'Environment', widget.log.environment),
-                          _buildItem(
-                            context,
-                            'Timestamp',
-                            DateFormat.yMd()
-                                .add_Hm()
-                                .format(widget.log.timestamp),
-                          ),
-                        ],
-                      ),
+                    child: Column(
+                      children: [
+                        _buildBoxedSection(
+                          context,
+                          'log_detail.log_details'.tr(),
+                          {
+                            'ID': widget.log.id,
+                            'Message': widget.log.message,
+                            'Level': widget.log.level,
+                            'Environment': widget.log.environment,
+                            'Timestamp': DateFormat.yMd().add_Hm().format(widget.log.timestamp),
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        _buildBoxedSection(
+                          context,
+                          'log_detail.error'.tr(),
+                          widget.log.error,
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(width: 20),
                   Expanded(
-                    child: _buildBoxedSection(
-                        context, 'log_detail.device'.tr(), widget.log.device),
+                    child: Column(
+                      children: [
+                        _buildBoxedSection(
+                          context,
+                          'log_detail.device'.tr(),
+                          widget.log.device,
+                        ),
+                        const SizedBox(height: 20),
+                        _buildBoxedSection(
+                          context,
+                          'log_detail.custom'.tr(),
+                          widget.log.custom,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: _buildBoxedSection(
-                        context, 'log_detail.error'.tr(), widget.log.error),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: _buildBoxedSection(
-                        context, 'log_detail.custom'.tr(), widget.log.custom),
-                  ),
-                ],
-              ),
+
             ],
           ],
         ),

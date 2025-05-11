@@ -28,5 +28,5 @@ class _DarkColors {
   final Color black = Colors.white;
   final Color staticBlack = const Color(0xFF222222);
   final Color blue = const Color(0xFF7BBDF7);
-  final Color error = const Color(0xFFDC3545);
+  final Color error = const Color(0xFFFF9AA1);
 }

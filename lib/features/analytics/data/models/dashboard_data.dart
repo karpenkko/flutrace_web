@@ -80,7 +80,7 @@ class DashboardData {
         .map((e) => VersionErrorStat.fromJson(e))
         .toList(),
     lastLogTimestamp: json['last_log_timestamp'] != null
-        ? DateTime.parse(json['last_log_timestamp'])
+        ? DateTime.parse(json['last_log_timestamp']).toLocal()
         : null,
   );
 }

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutrace_web/features/projects/domain/entities/project_entity.dart';
 import 'package:flutrace_web/features/projects/domain/repositories/project_repository.dart';
@@ -132,7 +133,7 @@ class ProjectCubit extends Cubit<ProjectState> {
   }
 
   Future<void> addProjectOwner(String ownerEmail) async {
-    emit(ProjectLoading(stateData: _data));
+    // emit(ProjectLoading(stateData: _data));
 
     final response = await _repository.addProjectOwner(
       _data.selectedProject!.id,
@@ -140,9 +141,10 @@ class ProjectCubit extends Cubit<ProjectState> {
     );
     response.fold(
       (failure) {
-        emit(ProjectError(
-          message: failure.errorMessage,
-          stateData: _data,
+        emit(ProjectLoaded(
+          stateData: _data.copyWith(
+            addingProjectOwnerError: 'owner_does_not_exist'.tr(),
+          ),
         ));
       },
       (project) {
@@ -155,6 +157,7 @@ class ProjectCubit extends Cubit<ProjectState> {
           stateData: _data.copyWith(
             projects: updatedProjects,
             selectedProject: project,
+            addingProjectOwnerError: null,
           ),
         ));
       },
